@@ -1,0 +1,57 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    string data, received;
+    int count = 0, parity, choice;
+
+    cout << "Enter binary data: ";
+    cin >> data;
+
+    cout << "\nChoose Parity Type:\n";
+    cout << "1. Even Parity\n";
+    cout << "2. Odd Parity\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    // Count number of 1s
+    for (int i = 0; i < data.length(); i++) {
+        if (data[i] == '1')
+            count++;
+    }
+
+    // Generate parity bit
+    if (choice == 1)
+        parity = count % 2;
+    else if (choice == 2)
+        parity = (count % 2 == 0) ? 1 : 0;
+    else {
+        cout << "Invalid choice!";
+        return 0;
+    }
+
+    cout << "\nParity Bit: " << parity << endl;
+    cout << "Transmitted Data: " << data << parity << endl;
+
+    // Receive data
+    cout << "\nEnter received data: ";
+    cin >> received;
+
+    count = 0;
+
+    // Count 1s in received data
+    for (int i = 0; i < received.length(); i++) {
+        if (received[i] == '1')
+            count++;
+    }
+
+    // Check parity
+    if (choice == 1 && count % 2 == 0)
+        cout << "No Error Detected";
+    else if (choice == 2 && count % 2 != 0)
+        cout << "No Error Detected";
+    else
+        cout << "Error Detected";
+
+    return 0;
+}

@@ -1,0 +1,74 @@
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+
+    // Declare variables for IP address and subnet prefix
+    int a, b, c, d, prefix;
+
+    // Take IP address from user
+    cout << "Enter IP address (e.g., 192 168 1 10): ";
+    cin >> a >> b >> c >> d;
+
+    // Take subnet prefix from user
+    cout << "Enter subnet prefix (e.g., 24): ";
+    cin >> prefix;
+
+    // Check whether IP address and prefix are valid
+    if (a < 0 || a > 255 || b < 0 || b > 255 ||
+        c < 0 || c > 255 || d < 0 || d > 255 ||
+        prefix < 0 || prefix > 32) {
+
+        cout << "Invalid IP address or prefix!" << endl;
+        return 1;
+    }
+
+    // Convert four IP parts into one 32-bit number
+    unsigned int ip = (a << 24) | (b << 16) | (c << 8) | d;
+
+    // Calculate subnet mask using prefix
+    unsigned int mask = (prefix == 0) ? 0 :
+                        (0xFFFFFFFFu << (32 - prefix));
+
+    // Calculate network address using AND operation
+    unsigned int network = ip & mask;
+
+    // Calculate broadcast address using OR and NOT operations
+    unsigned int broadcast = network | ~mask;
+
+    // Display subnet mask
+    cout << "\nSubnet Mask: ";
+    cout << ((mask >> 24) & 255) << "."
+         << ((mask >> 16) & 255) << "."
+         << ((mask >> 8) & 255) << "."
+         << (mask & 255) << endl;
+
+    // Display network address
+    cout << "Network Address: "
+         << ((network >> 24) & 255) << "."
+         << ((network >> 16) & 255) << "."
+         << ((network >> 8) & 255) << "."
+         << (network & 255) << endl;
+
+    // Display broadcast address
+    cout << "Broadcast Address: "
+         << ((broadcast >> 24) & 255) << "."
+         << ((broadcast >> 16) & 255) << "."
+         << ((broadcast >> 8) & 255) << "."
+         << (broadcast & 255) << endl;
+
+    // Calculate and display usable hosts
+    if (prefix <= 30) {
+        cout << "Usable Hosts: "
+             << pow(2, 32 - prefix) - 2 << endl;
+    }
+    else {
+        cout << "Usable Hosts: "
+             << (prefix == 31 ? 2 : 1) << endl;
+    }
+
+    // End the program successfully
+    return 0;
+}
