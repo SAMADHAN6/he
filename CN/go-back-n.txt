@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+	int n,w,lf;
+	cout<<"enter noo of frames: ";
+	cin>>n;
+	cout<<"enter window size: ";
+	cin>>w;
+	cout<<"enter lost frame : ";
+	cin>>lf;
+	
+	if(n<=0 || w<=0 || lf<0 ||lf>n){
+		cout<<"invalide input\n";
+		return 0;
+	}
+	int base=1;
+	while(base<=n){
+		int e=base+w-1;
+		if(e>n){
+			e=n;
+		}
+		cout<<"\nsending window "<<base<<"to"<<e<<"\n";
+		bool lw=false;
+		for(int i=base;i<=e;i++){
+			cout<<"sending frame "<<i<<"\n";
+			if(lf==i){
+				cout<<"frame "<<i<<"lost\n";
+				lw=true;
+			}
+			else if(lw){
+				cout<<"frame "<<i<<" discared by rteceiver\n";
+			}else{
+				cout<<"ack "<<i<<"received \n";
+			}
+			
+		}
+		if(lf>=base &&lf<=e){
+			cout << "\nTimeout occurred!" << endl;
+            cout << "Retransmitting frames:" << endl;
+            for(int i=lf;i<=e;i++){
+            	cout << "Resending Frame " << i << endl;
+                cout << "ACK " << i << " received" << endl;
+			}
+			lf=0;
+		}
+		base=e+1;
+	}
+	cout<<"\nall frames sent succesfully ";
+}

@@ -1,0 +1,37 @@
+
+#include <iostream>
+#include <cstring>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+using namespace std;
+
+int main()
+{
+    int s;
+    char b[100] = {0};
+
+    // Create UDP socket
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+
+    // Server address
+    sockaddr_in a{};
+    a.sin_family = AF_INET;
+    a.sin_port = htons(8080);
+    inet_pton(AF_INET, "127.0.0.1", &a.sin_addr);
+
+    // Send message
+    char msg[] = "Hello Server";
+
+    sendto(s, msg, strlen(msg), 0,
+           (struct sockaddr*)&a, sizeof(a));
+
+    // Receive reply
+    recvfrom(s, b, sizeof(b)-1, 0, NULL, NULL);
+
+    cout << "Server: " << b << endl;
+
+    close(s);
+
+    return 0;
+}
